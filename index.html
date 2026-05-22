@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>IP Lookup Tool</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -143,12 +143,20 @@
     .container { grid-template-columns: 1fr; }
     .map-card, #map { min-height: 400px; }
   }
+
+  table td.ip-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #00f2fe;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+  }
 </style>
-<script type='text/javascript' nonce='qMp6qm09HN34Nm3WdUC4EA==' src='https://arena.ai/S7ZoyHo7Z0OPtW7BcSAsUKaxxmcCjEv4j8JX7fZ5Ere1JlHiV277qV-sBp1JCf9TtU2reuW5xAo6EHusP4WQcbX8P99Hsv678G2kUZm0KKOuDO0WHt70bsKAhPcmJ4d-p2-x6iW60b9RvVQP-6Cinl7MvO3DUXaW4_h0Pziokvq7W9lCZnpneD82aA3I00NBWKUZ2GSHWNt3Fik5G-beQ8wiaIy2O4wi27ZgcmDBw6i9kNozlATpcYeH_ShR71xMAGnJuCsS8dcbzA16YY-YRwx9Tbw7ikxgzWMfBGajDamM0Bi3m9mxhXY1NGnewdn98Oxbof-tcg3FPP44GquxNneLlXrgt2HHt_iUPAVXSNQuWaG-xthhd4NGrjz-Vh4uBkooYDFq3iGhYvZjfa2YK_u_1VhsOtG56kJHYvZprAd3JLW9V5v1n7uQ77DXXgXhabWYP02jQo9XnAYO0BTKMH4Z8qL4SFPpFtpVrhgW-USCvSQe1th33WKfylMZsvGvGexsNYQKOBiJlFRgh2IWjQ'></script></head>
+</head>
 <body>
 
   <div class="search-bar">
-    <input type="text" id="ipInput" placeholder="Enter an IP address (leave blank for your own)..."/>
+    <input type="text" id="ipInput" placeholder="Enter an IP address (leave blank for your own)..." />
     <button onclick="lookupIP()">IP Lookup</button>
   </div>
 
@@ -157,7 +165,8 @@
   <div class="container">
     <div class="info-card">
       <table>
-        <tr><td>IP Address</td><td id="ip">—</td></tr>
+        <tr><td>IP Address</td><td id="ip" class="ip-value">—</td></tr>
+        <tr><td>Country</td><td id="country">—</td></tr>
         <tr>
           <td>City</td>
           <td>
@@ -166,18 +175,17 @@
           </td>
         </tr>
         <tr><td>Region</td><td id="region">—</td></tr>
-        <tr><td>Country</td><td id="country">—</td></tr>
-        <tr><td>Postal Code</td><td id="postal">—</td></tr>
         <tr><td>Latitude / Longitude</td><td id="latlng">—</td></tr>
         <tr><td>Time Zone</td><td id="timezone">—</td></tr>
-        <tr><td>Currency</td><td id="currency">—</td></tr>
         <tr><td>ASN</td><td id="asn">—</td></tr>
         <tr><td>Org</td><td id="org">—</td></tr>
       </table>
     </div>
 
     <div class="map-card">
-      <iframe id="map" src="https://www.google.com/maps?q=0,0&amp;z=2&amp;output=embed" allowfullscreen="" loading="lazy"></iframe>
+      <iframe id="map"
+        src="https://www.google.com/maps?q=0,0&z=2&output=embed"
+        allowfullscreen loading="lazy"></iframe>
     </div>
   </div>
 
@@ -214,74 +222,49 @@
 
   // --- Providers (each returns normalized object or throws) ---
   const providers = [
-    // geojs.io – very reliable, CORS-friendly, no API key
     {
       name: 'geojs.io',
       url: ip => ip
         ? `https://get.geojs.io/v1/ip/geo/${encodeURIComponent(ip)}.json`
         : `https://get.geojs.io/v1/ip/geo.json`,
       map: d => ({
-        ip: d.ip,
-        city: d.city,
-        region: d.region,
-        country_code: d.country_code,
-        country_name: d.country,
-        postal: d.zip || d.postal,
-        latitude: d.latitude,
-        longitude: d.longitude,
-        timezone: d.timezone,
-        tz_offset: d.offset,
-        currency: '',
+        ip: d.ip, city: d.city, region: d.region,
+        country_code: d.country_code, country_name: d.country,
+        latitude: d.latitude, longitude: d.longitude,
+        timezone: d.timezone, tz_offset: d.offset,
         asn: d.asn ? 'AS' + d.asn : '',
         org: d.organization_name || d.organization || ''
       })
     },
-    // ipwho.is – good fallback
     {
       name: 'ipwho.is',
       url: ip => ip ? `https://ipwho.is/${encodeURIComponent(ip)}` : `https://ipwho.is/`,
       map: d => {
         if (d.success === false) throw new Error(d.message || 'ipwho.is failed');
         return {
-          ip: d.ip,
-          city: d.city,
-          region: d.region,
-          country_code: d.country_code,
-          country_name: d.country,
-          postal: d.postal,
-          latitude: d.latitude,
-          longitude: d.longitude,
+          ip: d.ip, city: d.city, region: d.region,
+          country_code: d.country_code, country_name: d.country,
+          latitude: d.latitude, longitude: d.longitude,
           timezone: d.timezone && (d.timezone.id || ''),
           tz_offset: d.timezone && d.timezone.utc,
-          currency: d.currency && (d.currency.code || ''),
           asn: d.connection && d.connection.asn ? 'AS' + d.connection.asn : '',
           org: (d.connection && (d.connection.org || d.connection.isp)) || ''
         };
       }
     },
-    // freeipapi.com
     {
       name: 'freeipapi.com',
       url: ip => ip
         ? `https://freeipapi.com/api/json/${encodeURIComponent(ip)}`
         : `https://freeipapi.com/api/json`,
       map: d => ({
-        ip: d.ipAddress,
-        city: d.cityName,
-        region: d.regionName,
-        country_code: d.countryCode,
-        country_name: d.countryName,
-        postal: d.zipCode,
-        latitude: d.latitude,
-        longitude: d.longitude,
-        timezone: d.timeZone,
-        tz_offset: '',
-        currency: '',
-        asn: '',
-        org: ''
+        ip: d.ipAddress, city: d.cityName, region: d.regionName,
+        country_code: d.countryCode, country_name: d.countryName,
+        latitude: d.latitude, longitude: d.longitude,
+        timezone: d.timeZone, tz_offset: '',
+        asn: '', org: ''
       })
     },
-    // ipapi.co – often rate-limited but try last
     {
       name: 'ipapi.co',
       url: ip => ip ? `https://ipapi.co/${encodeURIComponent(ip)}/json/` : `https://ipapi.co/json/`,
@@ -290,9 +273,9 @@
         return {
           ip: d.ip, city: d.city, region: d.region,
           country_code: d.country_code, country_name: d.country_name,
-          postal: d.postal, latitude: d.latitude, longitude: d.longitude,
+          latitude: d.latitude, longitude: d.longitude,
           timezone: d.timezone, tz_offset: d.utc_offset,
-          currency: d.currency, asn: d.asn, org: d.org
+          asn: d.asn, org: d.org
         };
       }
     }
@@ -328,12 +311,10 @@
       document.getElementById('region').textContent = data.region || '—';
       document.getElementById('country').innerHTML =
         `<span class="flag">${flagEmoji(data.country_code)}</span>${data.country_code || ''}${data.country_name ? ' | ' + data.country_name : ''}`;
-      document.getElementById('postal').textContent = data.postal || '—';
       document.getElementById('latlng').textContent =
         (data.latitude ?? '—') + ' , ' + (data.longitude ?? '—');
       document.getElementById('timezone').textContent =
         data.timezone ? (data.tz_offset ? `${data.timezone} (${data.tz_offset})` : data.timezone) : '—';
-      document.getElementById('currency').textContent = data.currency || '—';
       document.getElementById('asn').textContent = data.asn || '—';
       document.getElementById('org').textContent = data.org || '—';
 
