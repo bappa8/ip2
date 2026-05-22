@@ -105,17 +105,6 @@
 
   table td:last-child { color: #00f2fe; font-weight: 500; }
 
-  .update-link {
-    float: right;
-    color: #f093fb;
-    text-decoration: none;
-    font-style: italic;
-    font-size: 0.95rem;
-    cursor: pointer;
-  }
-
-  .update-link:hover { text-decoration: underline; }
-
   .flag { margin-right: 6px; font-size: 1.2rem; }
 
   .map-card {
@@ -167,13 +156,7 @@
       <table>
         <tr><td>IP Address</td><td id="ip" class="ip-value">—</td></tr>
         <tr><td>Country</td><td id="country">—</td></tr>
-        <tr>
-          <td>City</td>
-          <td>
-            <span id="city">—</span>
-            <a class="update-link" onclick="lookupIP()">Update</a>
-          </td>
-        </tr>
+        <tr><td>City</td><td id="city">—</td></tr>
         <tr><td>Region</td><td id="region">—</td></tr>
         <tr><td>Latitude / Longitude</td><td id="latlng">—</td></tr>
         <tr><td>Time Zone</td><td id="timezone">—</td></tr>
@@ -285,11 +268,10 @@
     let lastErr;
     for (const p of providers) {
       try {
-        setStatus(`Fetching from ${p.name}…`);
         const raw = await fetchJSON(p.url(ip));
         const data = p.map(raw);
         if (data && (data.ip || data.latitude)) {
-          setStatus(`✓ Data from ${p.name}`, '#00f2fe');
+          setStatus('');
           return data;
         }
       } catch (e) {
