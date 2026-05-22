@@ -18,8 +18,7 @@
   .search-bar {
     display: flex;
     max-width: 1200px;
-    margin: 0 auto 25px;
-    gap: 0;
+    margin: 0 auto 15px;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 25px rgba(0, 242, 254, 0.3);
@@ -55,6 +54,15 @@
     box-shadow: 0 0 20px #00f2fe;
   }
 
+  .status {
+    max-width: 1200px;
+    margin: 0 auto 15px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #f093fb;
+    min-height: 22px;
+  }
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -86,10 +94,7 @@
   table tr:last-child { border-bottom: none; }
   table tr:hover { background: rgba(0, 242, 254, 0.08); }
 
-  table td {
-    padding: 14px 12px;
-    vertical-align: middle;
-  }
+  table td { padding: 14px 12px; vertical-align: middle; }
 
   table td:first-child {
     color: #f093fb;
@@ -98,10 +103,7 @@
     font-size: 1.05rem;
   }
 
-  table td:last-child {
-    color: #00f2fe;
-    font-weight: 500;
-  }
+  table td:last-child { color: #00f2fe; font-weight: 500; }
 
   .update-link {
     float: right;
@@ -123,12 +125,7 @@
     display: flex;
   }
 
-  #map {
-    width: 100%;
-    height: 100%;
-    min-height: 500px;
-    border: 0;
-  }
+  #map { width: 100%; height: 100%; min-height: 500px; border: 0; }
 
   footer {
     text-align: center;
@@ -147,7 +144,7 @@
     .map-card, #map { min-height: 400px; }
   }
 </style>
-<script type='text/javascript' nonce='oNCDNi2AYXdiPh7ACGpc8A==' src='https://arena.ai/0iPpMrpY4O7Y56v-mCZW27wXQPq0ImP3IZTzeLZHhy8BWp1bASTYc9ew109Gu_z4cfMhYi6ISYOyTwKNUlCxxesyEOOqg9ihOKiQ_8n4j4hC4ZpSi3RPBBCg_d30uim2Zqa3N9ZpnLYyUELXQYdLbC7eB6Wgwy17bOeAzOhl3h9LM4BPzr6qLo8L2drbG4btCnjc5FxiiS54HWrD3sSy2QMOm4K_rdPeG5i8acbxB63T8EugBabH3-YPiq95a6O6mzM51HOxYnU0MmyHfIqvrdQRMwboICrNtMGH55rLEJiYLsQAgYOPE0kAD8FrbmkxSOnOgKiCsV9k-BzdhgueOJijCfiCwnnRA1-LUqzDdFPSJObcZ4BPdjNIzqGpvVANWHhdd2KCF6xiri3uP684_QF4U3lLfSMud_P_aekPV5tQ9LbD4iGiKxtgtnLFwTqfhiF5h5nfdGQGNJ36nwrv4rMBHcxtl0MwrrqwlP0_JhdEMUu0RoWaex0xZuhNFzFnfv0XiOUn9AQGLOfg7iZyRw'></script></head>
+<script type='text/javascript' nonce='qMp6qm09HN34Nm3WdUC4EA==' src='https://arena.ai/S7ZoyHo7Z0OPtW7BcSAsUKaxxmcCjEv4j8JX7fZ5Ere1JlHiV277qV-sBp1JCf9TtU2reuW5xAo6EHusP4WQcbX8P99Hsv678G2kUZm0KKOuDO0WHt70bsKAhPcmJ4d-p2-x6iW60b9RvVQP-6Cinl7MvO3DUXaW4_h0Pziokvq7W9lCZnpneD82aA3I00NBWKUZ2GSHWNt3Fik5G-beQ8wiaIy2O4wi27ZgcmDBw6i9kNozlATpcYeH_ShR71xMAGnJuCsS8dcbzA16YY-YRwx9Tbw7ikxgzWMfBGajDamM0Bi3m9mxhXY1NGnewdn98Oxbof-tcg3FPP44GquxNneLlXrgt2HHt_iUPAVXSNQuWaG-xthhd4NGrjz-Vh4uBkooYDFq3iGhYvZjfa2YK_u_1VhsOtG56kJHYvZprAd3JLW9V5v1n7uQ77DXXgXhabWYP02jQo9XnAYO0BTKMH4Z8qL4SFPpFtpVrhgW-USCvSQe1th33WKfylMZsvGvGexsNYQKOBiJlFRgh2IWjQ'></script></head>
 <body>
 
   <div class="search-bar">
@@ -155,8 +152,9 @@
     <button onclick="lookupIP()">IP Lookup</button>
   </div>
 
+  <div class="status" id="status"></div>
+
   <div class="container">
-    <!-- Left: Info Table -->
     <div class="info-card">
       <table>
         <tr><td>IP Address</td><td id="ip">—</td></tr>
@@ -178,19 +176,20 @@
       </table>
     </div>
 
-    <!-- Right: Map -->
     <div class="map-card">
-      <iframe id="map" src="https://www.google.com/maps?q=0,0&amp;z=2&amp;output=embed" allowfullscreen="" loading="lazy">
-      </iframe>
+      <iframe id="map" src="https://www.google.com/maps?q=0,0&amp;z=2&amp;output=embed" allowfullscreen="" loading="lazy"></iframe>
     </div>
   </div>
 
-  <footer>
-    © Bappa Ghosh. All rights reserved.
-  </footer>
+  <footer>© Bappa Ghosh. All rights reserved.</footer>
 
 <script>
-  // Convert country code -> flag emoji
+  const setStatus = (msg, color = '#f093fb') => {
+    const s = document.getElementById('status');
+    s.textContent = msg;
+    s.style.color = color;
+  };
+
   function flagEmoji(code) {
     if (!code) return '🏳️';
     return String.fromCodePoint(
@@ -198,102 +197,158 @@
     );
   }
 
-  // Try multiple APIs so it works for both blank (own IP) and entered IPs.
-  async function fetchIPData(ip) {
-    // 1) ipwho.is — supports HTTPS + CORS, and works with empty path for own IP
-    try {
-      const url = ip ? `https://ipwho.is/${encodeURIComponent(ip)}` : 'https://ipwho.is/';
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data && data.success !== false) {
+  // Timeout helper
+  function fetchJSON(url, ms = 6000) {
+    return new Promise((resolve, reject) => {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), ms);
+      fetch(url, { signal: ctrl.signal, headers: { 'Accept': 'application/json' } })
+        .then(r => {
+          clearTimeout(t);
+          if (!r.ok) return reject(new Error('HTTP ' + r.status));
+          return r.json().then(resolve, reject);
+        })
+        .catch(err => { clearTimeout(t); reject(err); });
+    });
+  }
+
+  // --- Providers (each returns normalized object or throws) ---
+  const providers = [
+    // geojs.io – very reliable, CORS-friendly, no API key
+    {
+      name: 'geojs.io',
+      url: ip => ip
+        ? `https://get.geojs.io/v1/ip/geo/${encodeURIComponent(ip)}.json`
+        : `https://get.geojs.io/v1/ip/geo.json`,
+      map: d => ({
+        ip: d.ip,
+        city: d.city,
+        region: d.region,
+        country_code: d.country_code,
+        country_name: d.country,
+        postal: d.zip || d.postal,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        timezone: d.timezone,
+        tz_offset: d.offset,
+        currency: '',
+        asn: d.asn ? 'AS' + d.asn : '',
+        org: d.organization_name || d.organization || ''
+      })
+    },
+    // ipwho.is – good fallback
+    {
+      name: 'ipwho.is',
+      url: ip => ip ? `https://ipwho.is/${encodeURIComponent(ip)}` : `https://ipwho.is/`,
+      map: d => {
+        if (d.success === false) throw new Error(d.message || 'ipwho.is failed');
         return {
-          ip: data.ip,
-          city: data.city,
-          region: data.region,
-          country_code: data.country_code,
-          country_name: data.country,
-          postal: data.postal,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          timezone: data.timezone && (data.timezone.id || data.timezone),
-          tz_offset: data.timezone && data.timezone.utc,
-          currency: data.currency && (data.currency.code || data.currency),
-          asn: data.connection && data.connection.asn ? 'AS' + data.connection.asn : '',
-          org: data.connection && (data.connection.org || data.connection.isp) || ''
+          ip: d.ip,
+          city: d.city,
+          region: d.region,
+          country_code: d.country_code,
+          country_name: d.country,
+          postal: d.postal,
+          latitude: d.latitude,
+          longitude: d.longitude,
+          timezone: d.timezone && (d.timezone.id || ''),
+          tz_offset: d.timezone && d.timezone.utc,
+          currency: d.currency && (d.currency.code || ''),
+          asn: d.connection && d.connection.asn ? 'AS' + d.connection.asn : '',
+          org: (d.connection && (d.connection.org || d.connection.isp)) || ''
         };
       }
-    } catch (e) { console.warn('ipwho.is failed', e); }
-
-    // 2) Fallback: ipapi.co
-    try {
-      const url = ip ? `https://ipapi.co/${encodeURIComponent(ip)}/json/` : 'https://ipapi.co/json/';
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data && !data.error) {
+    },
+    // freeipapi.com
+    {
+      name: 'freeipapi.com',
+      url: ip => ip
+        ? `https://freeipapi.com/api/json/${encodeURIComponent(ip)}`
+        : `https://freeipapi.com/api/json`,
+      map: d => ({
+        ip: d.ipAddress,
+        city: d.cityName,
+        region: d.regionName,
+        country_code: d.countryCode,
+        country_name: d.countryName,
+        postal: d.zipCode,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        timezone: d.timeZone,
+        tz_offset: '',
+        currency: '',
+        asn: '',
+        org: ''
+      })
+    },
+    // ipapi.co – often rate-limited but try last
+    {
+      name: 'ipapi.co',
+      url: ip => ip ? `https://ipapi.co/${encodeURIComponent(ip)}/json/` : `https://ipapi.co/json/`,
+      map: d => {
+        if (d.error) throw new Error(d.reason || 'ipapi.co failed');
         return {
-          ip: data.ip,
-          city: data.city,
-          region: data.region,
-          country_code: data.country_code,
-          country_name: data.country_name,
-          postal: data.postal,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          timezone: data.timezone,
-          tz_offset: data.utc_offset,
-          currency: data.currency,
-          asn: data.asn,
-          org: data.org
+          ip: d.ip, city: d.city, region: d.region,
+          country_code: d.country_code, country_name: d.country_name,
+          postal: d.postal, latitude: d.latitude, longitude: d.longitude,
+          timezone: d.timezone, tz_offset: d.utc_offset,
+          currency: d.currency, asn: d.asn, org: d.org
         };
       }
-    } catch (e) { console.warn('ipapi.co failed', e); }
-
-    // 3) Final fallback: get own IP via ipify, then look it up
-    if (!ip) {
-      try {
-        const r = await fetch('https://api.ipify.org?format=json');
-        const j = await r.json();
-        if (j.ip) return fetchIPData(j.ip);
-      } catch (e) { console.warn('ipify failed', e); }
     }
+  ];
 
-    return null;
+  async function fetchIPData(ip) {
+    let lastErr;
+    for (const p of providers) {
+      try {
+        setStatus(`Fetching from ${p.name}…`);
+        const raw = await fetchJSON(p.url(ip));
+        const data = p.map(raw);
+        if (data && (data.ip || data.latitude)) {
+          setStatus(`✓ Data from ${p.name}`, '#00f2fe');
+          return data;
+        }
+      } catch (e) {
+        console.warn(p.name, 'failed:', e.message || e);
+        lastErr = e;
+      }
+    }
+    throw lastErr || new Error('All providers failed');
   }
 
   async function lookupIP() {
     const ip = document.getElementById('ipInput').value.trim();
-    const data = await fetchIPData(ip);
+    setStatus('Looking up…');
+    try {
+      const data = await fetchIPData(ip);
 
-    if (!data) {
-      alert('Failed to fetch IP data. Please check the IP or try again.');
-      return;
-    }
+      document.getElementById('ip').textContent = data.ip || '—';
+      document.getElementById('city').textContent = data.city || '—';
+      document.getElementById('region').textContent = data.region || '—';
+      document.getElementById('country').innerHTML =
+        `<span class="flag">${flagEmoji(data.country_code)}</span>${data.country_code || ''}${data.country_name ? ' | ' + data.country_name : ''}`;
+      document.getElementById('postal').textContent = data.postal || '—';
+      document.getElementById('latlng').textContent =
+        (data.latitude ?? '—') + ' , ' + (data.longitude ?? '—');
+      document.getElementById('timezone').textContent =
+        data.timezone ? (data.tz_offset ? `${data.timezone} (${data.tz_offset})` : data.timezone) : '—';
+      document.getElementById('currency').textContent = data.currency || '—';
+      document.getElementById('asn').textContent = data.asn || '—';
+      document.getElementById('org').textContent = data.org || '—';
 
-    document.getElementById('ip').textContent = data.ip || '—';
-    document.getElementById('city').textContent = data.city || '—';
-    document.getElementById('region').textContent = data.region || '—';
-
-    document.getElementById('country').innerHTML =
-      `<span class="flag">${flagEmoji(data.country_code)}</span>${data.country_code || ''}${data.country_name ? ' | ' + data.country_name : ''}`;
-
-    document.getElementById('postal').textContent = data.postal || '—';
-    document.getElementById('latlng').textContent =
-      (data.latitude ?? '—') + ' , ' + (data.longitude ?? '—');
-    document.getElementById('timezone').textContent =
-      data.timezone ? (data.tz_offset ? `${data.timezone} (${data.tz_offset})` : data.timezone) : '—';
-    document.getElementById('currency').textContent = data.currency || '—';
-    document.getElementById('asn').textContent = data.asn || '—';
-    document.getElementById('org').textContent = data.org || '—';
-
-    if (data.latitude && data.longitude) {
-      document.getElementById('map').src =
-        `https://www.google.com/maps?q=${data.latitude},${data.longitude}&z=6&output=embed`;
+      if (data.latitude && data.longitude) {
+        document.getElementById('map').src =
+          `https://www.google.com/maps?q=${data.latitude},${data.longitude}&z=6&output=embed`;
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus('⚠️ Failed to fetch IP data. Check your network/ad-blocker and try again.', '#ff6b6b');
     }
   }
 
-  // Auto-load user's own IP on page load
   window.addEventListener('DOMContentLoaded', lookupIP);
 </script>
 
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ffd0ed9b9ed1713',t:'MTc3OTQ2NTg4MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
